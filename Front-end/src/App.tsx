@@ -1,42 +1,40 @@
-import React from "react";
+import React, { Suspense, lazy } from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
-// import SignIn from "./pages/AuthPages/SignIn";
-// import SignUp from "./pages/AuthPages/SignUp";
-import ForgotPassword from "./pages/AuthPages/ForgotPassword";
-import VerifyOtp from "./pages/AuthPages/VerifyOtp";
-import ResetPassword from "./pages/AuthPages/ResetPassword";
-import AuthSelection from "./pages/AuthPages/AuthSelection";
-import AdminLogin from "./pages/AuthPages/AdminLogin";
-import TrustMemberAuth from "./pages/AuthPages/TrustMemberAuth";
-import NotFound from "./pages/OtherPage/NotFound";
-import UserProfiles from "./pages/UserProfiles";
-import Videos from "./pages/UiElements/Videos";
-import Images from "./pages/UiElements/Images";
-import Alerts from "./pages/UiElements/Alerts";
-import Badges from "./pages/UiElements/Badges";
-import Avatars from "./pages/UiElements/Avatars";
-import Buttons from "./pages/UiElements/Buttons";
-import LineChart from "./pages/Charts/LineChart";
-import BarChart from "./pages/Charts/BarChart";
-import Calendar from "./pages/Calendar";
-import BasicTables from "./pages/Tables/BasicTables";
-import FormElements from "./pages/Forms/FormElements";
-import Blank from "./pages/Blank";
-import AppLayout from "./layout/AppLayout";
+// Lazy-loaded routes
+const ForgotPassword = lazy(() => import("./pages/AuthPages/ForgotPassword"));
+const VerifyOtp = lazy(() => import("./pages/AuthPages/VerifyOtp"));
+const ResetPassword = lazy(() => import("./pages/AuthPages/ResetPassword"));
+const AuthSelection = lazy(() => import("./pages/AuthPages/AuthSelection"));
+const AdminLogin = lazy(() => import("./pages/AuthPages/AdminLogin"));
+const TrustMemberAuth = lazy(() => import("./pages/AuthPages/TrustMemberAuth"));
+const NotFound = lazy(() => import("./pages/OtherPage/NotFound"));
+const UserProfiles = lazy(() => import("./pages/UserProfiles"));
+const Videos = lazy(() => import("./pages/UiElements/Videos"));
+const Images = lazy(() => import("./pages/UiElements/Images"));
+const Alerts = lazy(() => import("./pages/UiElements/Alerts"));
+const Badges = lazy(() => import("./pages/UiElements/Badges"));
+const Avatars = lazy(() => import("./pages/UiElements/Avatars"));
+const Buttons = lazy(() => import("./pages/UiElements/Buttons"));
+const LineChart = lazy(() => import("./pages/Charts/LineChart"));
+const BarChart = lazy(() => import("./pages/Charts/BarChart"));
+const Calendar = lazy(() => import("./pages/Calendar"));
+const BasicTables = lazy(() => import("./pages/Tables/BasicTables"));
+const FormElements = lazy(() => import("./pages/Forms/FormElements"));
+const Blank = lazy(() => import("./pages/Blank"));
+const AppLayout = lazy(() => import("./layout/AppLayout"));
 import { ScrollToTop } from "./components/common/ScrollToTop";
-import Home from "./pages/Dashboard/Home";
-import MemberDashboard from "./pages/MemberDashboard/MemberDashboard";
-import MemberDocuments from "./pages/MemberDashboard/MemberDocuments";
-// import AdminDashboard from "./pages/Dashboard/AdminDashboard";
-import MasterForm from "./pages/Forms/MasterForm";
-import StateMaster from "./pages/Masters/StateMaster";
-import DistrictMaster from "./pages/Masters/DistrictMaster";
-import TalukaMaster from "./pages/Masters/TalukaMaster";
-import CityMaster from "./pages/Masters/CityMaster";
-import OccupationMaster from "./pages/Masters/OccupationMaster";
-import DesignationMaster from "./pages/Masters/DesignationMaster";
-import OMMemberForm from "./pages/Tables/OMMemberForm";
-import MemberDetailsPage from "./pages/Tables/MemberDetailsPage";
+const Home = lazy(() => import("./pages/Dashboard/Home"));
+const MemberDashboard = lazy(() => import("./pages/MemberDashboard/MemberDashboard"));
+const MemberDocuments = lazy(() => import("./pages/MemberDashboard/MemberDocuments"));
+const MasterForm = lazy(() => import("./pages/Forms/MasterForm"));
+const StateMaster = lazy(() => import("./pages/Masters/StateMaster"));
+const DistrictMaster = lazy(() => import("./pages/Masters/DistrictMaster"));
+const TalukaMaster = lazy(() => import("./pages/Masters/TalukaMaster"));
+const CityMaster = lazy(() => import("./pages/Masters/CityMaster"));
+const OccupationMaster = lazy(() => import("./pages/Masters/OccupationMaster"));
+const DesignationMaster = lazy(() => import("./pages/Masters/DesignationMaster"));
+const OMMemberForm = lazy(() => import("./pages/Tables/OMMemberForm"));
+const MemberDetailsPage = lazy(() => import("./pages/Tables/MemberDetailsPage"));
 
 // ProtectedRoute component
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
@@ -49,7 +47,8 @@ export default function App() {
     <>
       <Router>
         <ScrollToTop />
-        <Routes>
+        <Suspense fallback={<div />}> 
+          <Routes>
           {/* Protected Dashboard Layout */}
           <Route element={<ProtectedRoute><AppLayout /></ProtectedRoute>}>
             <Route path="/admin-dashboard" element={<Home />} />
@@ -112,7 +111,8 @@ export default function App() {
 
           {/* Fallback Route */}
           <Route path="*" element={<NotFound />} />
-        </Routes>
+          </Routes>
+        </Suspense>
       </Router>
     </>
   );
