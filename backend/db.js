@@ -5,12 +5,25 @@ require("dotenv").config();
 let db;
 
 function handleDisconnect() {
-  db = mysql.createConnection({
+  // Debug: Log environment variables
+  console.log("🔍 Debug - Environment Variables:");
+  console.log("DB_HOST:", process.env.DB_HOST);
+  console.log("DB_PORT:", process.env.DB_PORT);
+  console.log("DB_USER:", process.env.DB_USER);
+  console.log("DB_NAME:", process.env.DB_NAME);
+  console.log("NODE_ENV:", process.env.NODE_ENV);
+
+  const connectionConfig = {
     host: process.env.DB_HOST,
+    port: process.env.DB_PORT || 4000, // Add port configuration
     user: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME,
-  });
+  };
+
+  console.log("🔍 Debug - Connection Config:", connectionConfig);
+
+  db = mysql.createConnection(connectionConfig);
 
   db.connect((err) => {
     if (err) {
