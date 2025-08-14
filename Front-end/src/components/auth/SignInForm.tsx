@@ -68,10 +68,10 @@ export default function SignInForm({ userType = "member" }: SignInFormProps) {
     setOtpError("");
     setLoading(true);
     try {
-      const res = await fetch("http://localhost:3001/login-verify-otp", {
+      const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/login-verify-otp`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ userId: tempUserId, otp }),
+        body: JSON.stringify({ userId: tempUserId, otp, userType }),
       });
       const data = await res.json();
       if (res.ok) {
@@ -109,7 +109,7 @@ export default function SignInForm({ userType = "member" }: SignInFormProps) {
     }
     setLoading(true);
     try {
-      const res = await fetch("http://localhost:3001/login", {
+      const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, password, userType: "admin" }),
