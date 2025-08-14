@@ -39,7 +39,7 @@ export default function SignInForm({ userType = "member" }: SignInFormProps) {
     setLoading(true);
     try {
       // Call backend to verify credentials and send OTP
-      const res = await fetch("http://localhost:3001/request-otp", {
+      const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/request-otp`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, password, userType }),

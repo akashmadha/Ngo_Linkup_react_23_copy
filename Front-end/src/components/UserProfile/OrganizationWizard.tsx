@@ -384,7 +384,7 @@ const OrganizationWizard: React.FC = () => {
     try {
       console.log('Sending payload to backend:', JSON.stringify(payload, null, 2));
       
-      const res = await fetch('http://localhost:3001/api/member/registration-details', {
+      const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/member/registration-details`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
