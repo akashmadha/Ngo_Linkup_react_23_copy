@@ -84,7 +84,7 @@ export default function BasicTables() {
         return;
       }
 
-      const response = await fetch('http://localhost:3001/api/admin/om-members-full-details', {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/admin/om-members-full-details`, {
         headers: {
           'user-id': userId
         }
@@ -117,7 +117,7 @@ export default function BasicTables() {
         return;
       }
 
-      const response = await fetch(`http://localhost:3001/api/admin/member/${memberId}/status`, {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/admin/member/${memberId}/status`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -306,7 +306,7 @@ export default function BasicTables() {
 
       // Update each selected member
       for (const memberId of selectedRows) {
-        await fetch(`http://localhost:3001/api/admin/member/${memberId}/status`, {
+        await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/admin/member/${memberId}/status`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
@@ -340,7 +340,7 @@ export default function BasicTables() {
         throw new Error('User not found');
       }
 
-      const response = await fetch(`http://localhost:3001/api/admin/member/${memberId}`, {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/admin/member/${memberId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

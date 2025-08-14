@@ -137,7 +137,7 @@ export default function MemberDetailsView() {
       }
 
       console.log('Fetching member details for ID:', memberId);
-      const url = `http://localhost:3001/api/admin/om-members-full-details`;
+      const url = `${import.meta.env.VITE_API_BASE_URL}/api/admin/om-members-full-details`;
       console.log('Using URL:', url);
 
       const response = await fetch(url, {

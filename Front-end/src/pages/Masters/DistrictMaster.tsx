@@ -39,7 +39,7 @@ const DistrictMaster: React.FC = () => {
   const [statesCurrentPage, setStatesCurrentPage] = useState(1);
   const [statesPageSize, setStatesPageSize] = useState(10);
 
-  const API_BASE_URL = "http://localhost:3001";
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
   const { setModalOpen } = useContext(ModalContext);
 

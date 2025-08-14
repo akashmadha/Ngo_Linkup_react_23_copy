@@ -30,7 +30,7 @@ const CityMaster: React.FC = () => {
 
   // Fetch Cities
   const fetchCities = async (stateId?: number, districtId?: number, talukaId?: number) => {
-    let url = 'http://localhost:3001/api/admin/cities';
+    let url = `${import.meta.env.VITE_API_BASE_URL}/api/admin/cities`;
     const params = [];
     if (stateId) params.push(`stateId=${stateId}`);
     if (districtId) params.push(`districtId=${districtId}`);
@@ -63,7 +63,7 @@ const CityMaster: React.FC = () => {
 
   useEffect(() => {
     // Fetch all states on mount
-    fetch('http://localhost:3001/api/admin/states', {
+    fetch(`${import.meta.env.VITE_API_BASE_URL}/api/admin/states`, {
       headers: { 'user-id': localStorage.getItem('userId') || '' }
     })
       .then(res => res.json())
@@ -73,7 +73,7 @@ const CityMaster: React.FC = () => {
   useEffect(() => {
     // Fetch districts when state changes
     if (selectedState) {
-      fetch(`http://localhost:3001/api/admin/districts?stateId=${selectedState}`, {
+      fetch(`${import.meta.env.VITE_API_BASE_URL}/api/admin/districts?stateId=${selectedState}`, {
         headers: { 'user-id': localStorage.getItem('userId') || '' }
       })
         .then(res => res.json())
@@ -87,7 +87,7 @@ const CityMaster: React.FC = () => {
   useEffect(() => {
     // Fetch talukas when district changes
     if (selectedState && selectedDistrict) {
-      fetch(`http://localhost:3001/api/admin/talukas?stateId=${selectedState}&districtId=${selectedDistrict}`, {
+      fetch(`${import.meta.env.VITE_API_BASE_URL}/api/admin/talukas?stateId=${selectedState}&districtId=${selectedDistrict}`, {
         headers: { 'user-id': localStorage.getItem('userId') || '' }
       })
         .then(res => res.json())
@@ -150,7 +150,7 @@ const CityMaster: React.FC = () => {
     setSuccess('');
     try {
       const userId = localStorage.getItem('userId');
-      const response = await fetch('http://localhost:3001/api/admin/cities', {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/admin/cities`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

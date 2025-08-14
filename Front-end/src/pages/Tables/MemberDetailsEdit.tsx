@@ -87,7 +87,7 @@ export default function MemberDetailsEdit() {
       }
 
       console.log('Fetching member details for ID:', memberId);
-      const url = `http://localhost:3001/api/admin/om-members-full-details`;
+      const url = `${import.meta.env.VITE_API_BASE_URL}/api/admin/om-members-full-details`;
       console.log('Using URL:', url);
 
       const response = await fetch(url, {
@@ -152,7 +152,7 @@ export default function MemberDetailsEdit() {
         throw new Error('User not found');
       }
 
-      const response = await fetch(`http://localhost:3001/api/admin/member/${memberId}`, {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/admin/member/${memberId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -181,7 +181,7 @@ export default function MemberDetailsEdit() {
         throw new Error('User not found');
       }
 
-      const response = await fetch(`http://localhost:3001/api/admin/member/${memberId}`, {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/admin/member/${memberId}`, {
         method: 'DELETE',
         headers: {
           'user-id': userId
@@ -208,7 +208,7 @@ export default function MemberDetailsEdit() {
         return;
       }
 
-      const response = await fetch(`http://localhost:3001/api/admin/member/${memberId}/status`, {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/admin/member/${memberId}/status`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

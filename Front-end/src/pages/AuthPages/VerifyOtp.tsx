@@ -37,7 +37,7 @@ export default function VerifyOtp() {
     setToastType("");
 
     try {
-      const res = await fetch("http://localhost:3001/verify-otp", {
+      const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/verify-otp`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, otp }),

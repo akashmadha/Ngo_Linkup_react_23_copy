@@ -27,7 +27,7 @@ const StateMaster: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(PAGE_SIZE_OPTIONS[0]);
 
-  const API_BASE_URL = "http://localhost:3001";
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
   // Fetch states from API
   const fetchStates = async () => {

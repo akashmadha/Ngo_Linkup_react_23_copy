@@ -17,7 +17,7 @@ const OrganizationList: React.FC = () => {
   useEffect(() => {
     const fetchOrganizations = async () => {
       try {
-        const response = await fetch('http://localhost:3001/api/admin/trust-members', {
+        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/admin/trust-members`, {
           headers: {
             'user-id': localStorage.getItem('userId') || '',
           },

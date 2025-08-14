@@ -251,7 +251,7 @@ const OrganizationWizard: React.FC = () => {
       if (!userId) return;
       setLoading(true);
       try {
-        const res = await fetch('http://localhost:3001/api/member/registration-details', {
+        const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/member/registration-details`, {
           headers: { 'user-id': userId }
         });
         const data = await res.json();
@@ -291,7 +291,7 @@ const OrganizationWizard: React.FC = () => {
 
   // Fetch all states on mount
   useEffect(() => {
-    fetch('http://localhost:3001/api/states')
+    fetch(`${import.meta.env.VITE_API_BASE_URL}/api/states`)
       .then(res => res.json())
       .then(data => setStates(data.data || []));
   }, []);
@@ -299,7 +299,7 @@ const OrganizationWizard: React.FC = () => {
   // Fetch districts when state changes
   useEffect(() => {
     if (address.state) {
-      fetch(`http://localhost:3001/api/districts?stateId=${address.state}`)
+      fetch(`${import.meta.env.VITE_API_BASE_URL}/api/districts?stateId=${address.state}`)
         .then(res => res.json())
         .then(data => setDistricts(data.data || []));
     } else {
@@ -313,7 +313,7 @@ const OrganizationWizard: React.FC = () => {
   // Fetch talukas when district changes
   useEffect(() => {
     if (address.state && address.district) {
-      fetch(`http://localhost:3001/api/talukas?stateId=${address.state}&districtId=${address.district}`)
+      fetch(`${import.meta.env.VITE_API_BASE_URL}/api/talukas?stateId=${address.state}&districtId=${address.district}`)
         .then(res => res.json())
         .then(data => setTalukas(data.data || []));
     } else {
@@ -326,7 +326,7 @@ const OrganizationWizard: React.FC = () => {
   // Fetch cities when district changes (removed taluka dependency since cities table doesn't have taluka_id)
   useEffect(() => {
     if (address.state && address.district) {
-      fetch(`http://localhost:3001/api/cities?stateId=${address.state}&districtId=${address.district}`)
+      fetch(`${import.meta.env.VITE_API_BASE_URL}/api/cities?stateId=${address.state}&districtId=${address.district}`)
         .then(res => res.json())
         .then(data => setCities(data.data || []));
     } else {

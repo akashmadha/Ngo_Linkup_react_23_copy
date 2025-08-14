@@ -81,7 +81,7 @@ export default function DocumentUploadModal({
       formData.append("documentName", documentName.trim());
       formData.append("documentType", uploadedFile.file.type);
 
-      const response = await fetch(`http://localhost:3001/api/admin/member/${memberId}/documents`, {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/admin/member/${memberId}/documents`, {
         method: "POST",
         headers: {
           'user-id': adminId

@@ -43,7 +43,7 @@ export default function TrustMembersTable() {
         return;
       }
 
-      const response = await fetch("http://localhost:3001/api/admin/trust-members", {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/admin/trust-members`, {
         headers: {
           'user-id': adminId
         }
@@ -77,7 +77,7 @@ export default function TrustMembersTable() {
 
       const newStatus = currentStatus.toLowerCase() === "active" ? "inactive" : "active";
 
-      const response = await fetch(`http://localhost:3001/api/admin/member/${memberId}/status`, {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/admin/member/${memberId}/status`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

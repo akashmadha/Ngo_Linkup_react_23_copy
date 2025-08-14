@@ -65,7 +65,7 @@ export default function MemberDashboard() {
         return;
       }
 
-      const response = await fetch("http://localhost:3001/api/member/profile", {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/member/profile`, {
         headers: {
           'user-id': userId
         }
@@ -97,7 +97,7 @@ export default function MemberDashboard() {
         return;
       }
 
-      const response = await fetch(`http://localhost:3001/api/member/documents/${documentId}`, {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/member/documents/${documentId}`, {
         headers: {
           'user-id': userId
         }

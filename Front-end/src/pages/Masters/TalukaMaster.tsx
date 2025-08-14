@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { CheckCircleIcon, ExclamationTriangleIcon, TrashIcon, PencilIcon, PlusIcon, ChevronDownIcon } from '@heroicons/react/24/outline';
 
-const API_BASE = "http://localhost:3001/api/admin";
+const API_BASE = `${import.meta.env.VITE_API_BASE_URL}/api/admin`;
 const USER_ID = localStorage.getItem("userId") || "1";
 
 type ToastType = 'success' | 'error';

@@ -127,7 +127,7 @@ export default function AdminDashboard() {
         return;
       }
 
-      const response = await fetch('http://localhost:3001/api/admin/om-members-full-details', {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/admin/om-members-full-details`, {
         headers: {
           'user-id': userId
         }

@@ -27,7 +27,7 @@ const OrganizationDetailsModal: React.FC<OrganizationDetailsProps> = ({ organiza
     const fetchDetails = async () => {
       setLoading(true);
       try {
-        const response = await fetch(`http://localhost:3001/api/admin/member-details/${organizationId}`, {
+        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/admin/member-details/${organizationId}`, {
           headers: { 'user-id': localStorage.getItem('userId') || '' },
         });
         const data = await response.json();

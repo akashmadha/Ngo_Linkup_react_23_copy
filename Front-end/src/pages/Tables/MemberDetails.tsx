@@ -127,7 +127,7 @@ export default function MemberDetails() {
         return;
       }
 
-      const response = await fetch(`http://localhost:3001/api/admin/member-details/${memberId}`, {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/admin/member-details/${memberId}`, {
         headers: {
           'user-id': userId
         }
