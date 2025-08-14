@@ -59,7 +59,7 @@ const upload = multer({
 
 // CORS configuration for production
 const allowedOrigins = process.env.NODE_ENV === 'production' 
-  ? ['https://ngolinkupreact23.vercel.app', 'https://your-custom-domain.com']
+  ? ['https://ngo-linkup-react-23.vercel.app', 'https://your-custom-domain.com']
   : ['http://localhost:5173', 'http://localhost:5174', 'http://localhost:3000'];
 
 app.use(cors({
