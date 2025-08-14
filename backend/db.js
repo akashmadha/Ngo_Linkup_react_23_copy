@@ -3,8 +3,12 @@ const mysql = require("mysql");
 require("dotenv").config();
 
 let db;
+let isConnecting = false;
 
 function handleDisconnect() {
+  if (isConnecting) return;
+  isConnecting = true;
+
   // Debug: Log environment variables
   console.log("🔍 Debug - Environment Variables:");
   console.log("DB_HOST:", process.env.DB_HOST);
@@ -38,6 +42,7 @@ function handleDisconnect() {
   db = mysql.createConnection(connectionConfig);
 
   db.connect((err) => {
+    isConnecting = false;
     if (err) {
       console.log("❌ MySQL connection error:", err);
       setTimeout(handleDisconnect, 2000); // Try again after 2 seconds
@@ -47,11 +52,13 @@ function handleDisconnect() {
   });
 
   db.on('error', function(err) {
-    if (err.code === 'PROTOCOL_CONNECTION_LOST') {
-      console.log('⚠️  MySQL connection lost. Reconnecting...');
-      handleDisconnect();
+    console.log('⚠️  MySQL connection error:', err);
+    if (err.code === 'PROTOCOL_CONNECTION_LOST' || err.code === 'PROTOCOL_ENQUEUE_AFTER_FATAL_ERROR') {
+      console.log('⚠️  MySQL connection lost or fatal error. Reconnecting...');
+      db.destroy(); // Force close the connection
+      setTimeout(handleDisconnect, 2000); // Try again after 2 seconds
     } else {
-      throw err;
+      console.log('⚠️  Other MySQL error:', err);
     }
   });
 }
