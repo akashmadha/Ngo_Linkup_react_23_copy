@@ -14,6 +14,15 @@ console.log("DB_HOST is undefined:", process.env.DB_HOST === undefined);
 console.log("DB_HOST is null:", process.env.DB_HOST === null);
 console.log("DB_HOST length:", process.env.DB_HOST ? process.env.DB_HOST.length : "undefined");
 
+// Force exit if environment variables are not loaded
+if (!process.env.DB_HOST || process.env.DB_HOST === "localhost" || process.env.DB_HOST === "127.0.0.1") {
+  console.error("❌ CRITICAL: Environment variables not loaded properly!");
+  console.error("DB_HOST is:", process.env.DB_HOST);
+  console.error("This should be: gateway01.ap-southeast-1.prod.aws.tidbcloud.com");
+  console.error("Railway environment variables are not being loaded!");
+  process.exit(1);
+}
+
 // Validate required environment variables
 if (!process.env.DB_HOST || !process.env.DB_USER || !process.env.DB_PASSWORD || !process.env.DB_NAME) {
   console.error("❌ Missing required database environment variables!");
