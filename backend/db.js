@@ -26,6 +26,13 @@ if (!process.env.DB_HOST || !process.env.DB_USER || !process.env.DB_PASSWORD || 
   process.exit(1);
 }
 
+console.log("🔍 Database Connection Details:");
+console.log("Host:", process.env.DB_HOST);
+console.log("Port:", process.env.DB_PORT);
+console.log("User:", process.env.DB_USER);
+console.log("Database:", process.env.DB_NAME);
+console.log("Password:", process.env.DB_PASSWORD ? "***SET***" : "***MISSING***");
+
 const pool = mysql.createPool({
   host: process.env.DB_HOST,
   port: process.env.DB_PORT,
