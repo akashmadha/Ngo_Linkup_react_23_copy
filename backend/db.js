@@ -49,11 +49,14 @@ const pool = mysql.createPool({
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
   ssl: {
-    rejectUnauthorized: false,
-    minVersion: "TLSv1.2"
+    rejectUnauthorized: true,
+    minVersion: "TLSv1.2",
+    ca: process.env.DB_CA_CERT || undefined
   },
-  connectionLimit: 10, // max open connections
-  connectTimeout: 10000 // 10s timeout for new connections
+  connectionLimit: 10,
+  connectTimeout: 30000, // Increased timeout for SSL handshake
+  acquireTimeout: 30000,
+  timeout: 30000
 });
 
 console.log("🔍 Debug - Connection Pool Created");
