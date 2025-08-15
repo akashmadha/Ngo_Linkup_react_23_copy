@@ -14,12 +14,24 @@ console.log("DB_HOST is undefined:", process.env.DB_HOST === undefined);
 console.log("DB_HOST is null:", process.env.DB_HOST === null);
 console.log("DB_HOST length:", process.env.DB_HOST ? process.env.DB_HOST.length : "undefined");
 
+// Validate required environment variables
+if (!process.env.DB_HOST || !process.env.DB_USER || !process.env.DB_PASSWORD || !process.env.DB_NAME) {
+  console.error("❌ Missing required database environment variables!");
+  console.error("Required: DB_HOST, DB_USER, DB_PASSWORD, DB_NAME");
+  console.error("Current values:");
+  console.error("DB_HOST:", process.env.DB_HOST);
+  console.error("DB_USER:", process.env.DB_USER);
+  console.error("DB_PASSWORD:", process.env.DB_PASSWORD ? "***SET***" : "***MISSING***");
+  console.error("DB_NAME:", process.env.DB_NAME);
+  process.exit(1);
+}
+
 const pool = mysql.createPool({
-  host: process.env.DB_HOST || "gateway01.ap-southeast-1.prod.aws.tidbcloud.com",
-  port: process.env.DB_PORT || 4000,
-  user: process.env.DB_USER || "4Vqx4ZUVAZtzDyk.root",
-  password: process.env.DB_PASSWORD || "aFb9wvjqeXt1C4m7",
-  database: process.env.DB_NAME || "test",
+  host: process.env.DB_HOST,
+  port: process.env.DB_PORT,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
   ssl: {
     rejectUnauthorized: false,
     minVersion: "TLSv1.2"
