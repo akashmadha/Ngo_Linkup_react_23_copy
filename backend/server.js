@@ -3,6 +3,14 @@ const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
 require("dotenv").config();
+
+// Log environment variables for debugging
+console.log("🔧 Environment Check:");
+console.log("NODE_ENV:", process.env.NODE_ENV);
+console.log("PORT:", process.env.PORT);
+console.log("RAILWAY_STATIC_URL:", process.env.RAILWAY_STATIC_URL);
+console.log("Database config available:", !!process.env.DB_HOST);
+
 const bcrypt = require("bcrypt");
 const nodemailer = require("nodemailer");
 const multer = require("multer");
@@ -59,7 +67,12 @@ const upload = multer({
 
 // CORS configuration for production
 const allowedOrigins = process.env.NODE_ENV === 'production' 
-  ? ['https://ngo-linkup-react-23.vercel.app', 'https://your-custom-domain.com']
+  ? [
+      'https://ngo-linkup-react-23.vercel.app', 
+      'https://your-custom-domain.com',
+      'https://*.railway.app',
+      'https://*.up.railway.app'
+    ]
   : ['http://localhost:5173', 'http://localhost:5174', 'http://localhost:3000'];
 
 app.use(cors({
@@ -2010,6 +2023,7 @@ app.get('/api/admin/member-details/:memberId', getAdminInfo, requireAdmin, async
 app.use('/api/member', getUserInfo, requireActiveMember);
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`🚀 Server running on http://localhost:${PORT}`);
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`🚀 Server running on port ${PORT}`);
+  console.log(`🌐 Railway URL: ${process.env.RAILWAY_STATIC_URL || 'Not set'}`);
 });
