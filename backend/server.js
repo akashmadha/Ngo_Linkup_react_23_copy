@@ -2023,7 +2023,48 @@ app.get('/api/admin/member-details/:memberId', getAdminInfo, requireAdmin, async
 app.use('/api/member', getUserInfo, requireActiveMember);
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, '0.0.0.0', () => {
+
+// Graceful shutdown handling
+process.on('SIGTERM', () => {
+  console.log('🛑 SIGTERM received, shutting down gracefully...');
+  process.exit(0);
+});
+
+process.on('SIGINT', () => {
+  console.log('🛑 SIGINT received, shutting down gracefully...');
+  process.exit(0);
+});
+
+// Start server with error handling
+const server = app.listen(PORT, '0.0.0.0', () => {
   console.log(`🚀 Server running on port ${PORT}`);
   console.log(`🌐 Railway URL: ${process.env.RAILWAY_STATIC_URL || 'Not set'}`);
+  console.log(`🔧 Environment: ${process.env.NODE_ENV || 'development'}`);
+  console.log(`🗄️ Database Host: ${process.env.DB_HOST || 'Not set'}`);
+  console.log(`📊 Database Port: ${process.env.DB_PORT || '3306 (default)'}`);
+});
+
+// Handle server errors
+server.on('error', (err) => {
+  if (err.code === 'EADDRINUSE') {
+    console.error(`❌ Port ${PORT} is already in use`);
+    console.error('💡 Try using a different port or stop the service using this port');
+  } else {
+    console.error('❌ Server error:', err);
+  }
+  process.exit(1);
+});
+
+// Handle uncaught exceptions
+process.on('uncaughtException', (err) => {
+  console.error('❌ Uncaught Exception:', err);
+  console.error('💡 This is a critical error that requires immediate attention');
+  process.exit(1);
+});
+
+// Handle unhandled promise rejections
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('❌ Unhandled Rejection at:', promise, 'reason:', reason);
+  console.error('💡 This indicates a promise that was rejected but not handled');
+  process.exit(1);
 });
