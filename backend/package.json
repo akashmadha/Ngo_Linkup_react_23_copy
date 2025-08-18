@@ -9,8 +9,7 @@
     "dev": "nodemon server.js",
     "build": "echo 'No build step required'",
     "railway": "node server.js",
-    "test-db": "node test-db-connection.js",
-    "postinstall": "echo 'Dependencies installed successfully' && npm list --depth=0"
+    "test-db": "node test-db-connection.js"
   },
   "keywords": [],
   "author": "",
