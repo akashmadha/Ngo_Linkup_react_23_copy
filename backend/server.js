@@ -10,6 +10,14 @@ console.log("NODE_ENV:", process.env.NODE_ENV);
 console.log("PORT:", process.env.PORT);
 console.log("RAILWAY_STATIC_URL:", process.env.RAILWAY_STATIC_URL);
 console.log("Database config available:", !!process.env.DB_HOST);
+console.log("DB_HOST:", process.env.DB_HOST);
+console.log("DB_USER:", process.env.DB_USER ? "Set" : "Not set");
+console.log("DB_NAME:", process.env.DB_NAME);
+console.log("DB_PORT:", process.env.DB_PORT || "3306 (default)");
+console.log("Current working directory:", process.cwd());
+console.log("Node version:", process.version);
+console.log("Platform:", process.platform);
+console.log("Architecture:", process.arch);
 
 const bcrypt = require("bcrypt");
 const nodemailer = require("nodemailer");
@@ -23,8 +31,20 @@ const db = require("./db");
 
 // Create uploads directory if it doesn't exist
 const uploadsDir = path.join(__dirname, 'uploads');
-if (!fs.existsSync(uploadsDir)) {
-  fs.mkdirSync(uploadsDir, { recursive: true });
+console.log("📁 Uploads directory path:", uploadsDir);
+console.log("📁 Current directory:", __dirname);
+
+try {
+  if (!fs.existsSync(uploadsDir)) {
+    console.log("📁 Creating uploads directory...");
+    fs.mkdirSync(uploadsDir, { recursive: true });
+    console.log("✅ Uploads directory created successfully");
+  } else {
+    console.log("✅ Uploads directory already exists");
+  }
+} catch (error) {
+  console.error("❌ Error creating uploads directory:", error);
+  // Continue anyway, as this is not critical for server startup
 }
 
 // Configure multer for file uploads
@@ -96,10 +116,13 @@ app.use('/uploads', express.static(uploadsDir));
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {
-  res.json({ 
+  // Basic health check - just check if server is running
+  res.status(200).json({ 
     status: 'OK', 
     message: 'Server is running',
-    timestamp: new Date().toISOString()
+    timestamp: new Date().toISOString(),
+    uptime: process.uptime(),
+    environment: process.env.NODE_ENV || 'development'
   });
 });
 
