@@ -19,6 +19,10 @@ console.log("Node version:", process.version);
 console.log("Platform:", process.platform);
 console.log("Architecture:", process.arch);
 
+// Override Railway URL with correct one
+const CORRECT_RAILWAY_URL = "https://ngolinkupreact23-production-d2b6.railway.app";
+console.log("🌐 Correct Railway URL:", CORRECT_RAILWAY_URL);
+
 const bcrypt = require("bcrypt");
 const nodemailer = require("nodemailer");
 const multer = require("multer");
