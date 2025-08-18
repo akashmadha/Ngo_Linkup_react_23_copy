@@ -19,9 +19,8 @@ console.log("Node version:", process.version);
 console.log("Platform:", process.platform);
 console.log("Architecture:", process.arch);
 
-// Override Railway URL with correct one
-const CORRECT_RAILWAY_URL = "https://ngolinkupreact23-production-d2b6.railway.app";
-console.log("🌐 Correct Railway URL:", CORRECT_RAILWAY_URL);
+// Railway URL will be set via environment variables
+console.log("🌐 Railway URL from env:", process.env.RAILWAY_STATIC_URL);
 
 const bcrypt = require("bcrypt");
 const nodemailer = require("nodemailer");
@@ -92,45 +91,30 @@ const upload = multer({
 // CORS configuration for production
 const allowedOrigins = process.env.NODE_ENV === 'production' 
   ? [
-      'https://ngo-linkup-react-23.vercel.app', 
-      'https://ngo-linkup-react-23.vercel.app/',
-      'https://*.railway.app',
-      'https://*.up.railway.app'
+      'https://ngo-linkup-react-23.vercel.app',  // your frontend (Vercel)
+      'https://ngolinkupreact23-production-d2b6.railway.app' // your backend domain (optional, if you call backend from itself)
     ]
   : ['http://localhost:5173', 'http://localhost:5174', 'http://localhost:3000'];
 
 app.use(cors({
   origin: function (origin, callback) {
     console.log('🌐 CORS check for origin:', origin);
-    
-    // Allow requests with no origin (like mobile apps or curl requests)
+
+    // Allow requests with no origin (like curl, Postman, mobile apps)
     if (!origin) {
       console.log('✅ Allowing request with no origin');
       return callback(null, true);
     }
-    
-    // Check if origin is in allowed list
-    const isAllowed = allowedOrigins.some(allowed => {
-      if (allowed.includes('*')) {
-        // Handle wildcard domains
-        const allowedDomain = allowed.replace('*.', '');
-        return origin.endsWith(allowedDomain);
-      }
-      return origin === allowed;
-    });
-    
-    if (isAllowed) {
-      console.log('✅ CORS allowed for origin:', origin);
-      callback(null, true);
+
+    if (allowedOrigins.includes(origin)) {
+      console.log('✅ Origin allowed:', origin);
+      return callback(null, true);
     } else {
-      console.log('❌ CORS blocked for origin:', origin);
-      callback(new Error(`Not allowed by CORS: ${origin}`));
+      console.log('❌ Origin not allowed:', origin);
+      return callback(new Error('Not allowed by CORS'));
     }
   },
-  credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'user-id', 'admin-id', 'Authorization'],
-  optionsSuccessStatus: 200
+  credentials: true
 }));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
