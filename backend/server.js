@@ -89,7 +89,7 @@ const upload = multer({
 const allowedOrigins = process.env.NODE_ENV === 'production' 
   ? [
       'https://ngo-linkup-react-23.vercel.app', 
-      'https://your-custom-domain.com',
+      'https://ngo-linkup-react-23.vercel.app/',
       'https://*.railway.app',
       'https://*.up.railway.app'
     ]
@@ -97,18 +97,36 @@ const allowedOrigins = process.env.NODE_ENV === 'production'
 
 app.use(cors({
   origin: function (origin, callback) {
-    // Allow requests with no origin (like mobile apps or curl requests)
-    if (!origin) return callback(null, true);
+    console.log('🌐 CORS check for origin:', origin);
     
-    if (allowedOrigins.indexOf(origin) !== -1) {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) {
+      console.log('✅ Allowing request with no origin');
+      return callback(null, true);
+    }
+    
+    // Check if origin is in allowed list
+    const isAllowed = allowedOrigins.some(allowed => {
+      if (allowed.includes('*')) {
+        // Handle wildcard domains
+        const allowedDomain = allowed.replace('*.', '');
+        return origin.endsWith(allowedDomain);
+      }
+      return origin === allowed;
+    });
+    
+    if (isAllowed) {
+      console.log('✅ CORS allowed for origin:', origin);
       callback(null, true);
     } else {
-      callback(new Error('Not allowed by CORS'));
+      console.log('❌ CORS blocked for origin:', origin);
+      callback(new Error(`Not allowed by CORS: ${origin}`));
     }
   },
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'user-id', 'admin-id']
+  allowedHeaders: ['Content-Type', 'user-id', 'admin-id', 'Authorization'],
+  optionsSuccessStatus: 200
 }));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
