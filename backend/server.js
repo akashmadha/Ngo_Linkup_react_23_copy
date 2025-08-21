@@ -2,13 +2,14 @@
 const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
+
 require("dotenv").config();
 
 // Log environment variables for debugging
 console.log("🔧 Environment Check:");
 console.log("NODE_ENV:", process.env.NODE_ENV);
 console.log("PORT:", process.env.PORT);
-console.log("RAILWAY_STATIC_URL:", process.env.RAILWAY_STATIC_URL);
+console.log("FRONTEND_URL:", process.env.FRONTEND_URL);
 console.log("Database config available:", !!process.env.DB_HOST);
 console.log("DB_HOST:", process.env.DB_HOST);
 console.log("DB_USER:", process.env.DB_USER ? "Set" : "Not set");
@@ -19,8 +20,8 @@ console.log("Node version:", process.version);
 console.log("Platform:", process.platform);
 console.log("Architecture:", process.arch);
 
-// Railway URL will be set via environment variables
-console.log("🌐 Railway URL from env:", process.env.RAILWAY_STATIC_URL);
+// Frontend URL will be set via environment variables
+console.log("🌐 Frontend URL from env:", process.env.FRONTEND_URL);
 
 const bcrypt = require("bcrypt");
 const nodemailer = require("nodemailer");
@@ -91,8 +92,9 @@ const upload = multer({
 // CORS configuration for production
 const allowedOrigins = process.env.NODE_ENV === 'production' 
   ? [
-      'https://ngo-linkup-react-23.vercel.app',  // your frontend (Vercel)
-      'https://ngolinkupreact23-production-d2b6.railway.app' // your backend domain (optional, if you call backend from itself)
+      'https://ngo-front-j4kb.vercel.app',  // your Vercel frontend
+      process.env.FRONTEND_URL || 'https://ngo-front-j4kb.vercel.app',
+      process.env.BACKEND_URL || 'https://ngo-backend-03vj.onrender.com'
     ]
   : ['http://localhost:5173', 'http://localhost:5174', 'http://localhost:3000'];
 
@@ -129,6 +131,24 @@ app.get('/api/health', (req, res) => {
     timestamp: new Date().toISOString(),
     uptime: process.uptime(),
     environment: process.env.NODE_ENV || 'development'
+  });
+});
+
+// Database test endpoint
+app.get('/api/test-db', (req, res) => {
+  db.query('SELECT 1 as test', (err, results) => {
+    if (err) {
+      console.error('Database test failed:', err);
+      return res.status(500).json({ 
+        error: 'Database connection failed', 
+        details: err.message 
+      });
+    }
+    res.json({ 
+      message: 'Database connection successful', 
+      test: results[0],
+      timestamp: new Date().toISOString()
+    });
   });
 });
 
@@ -274,7 +294,12 @@ app.get("/", (req, res) => {
   res.send("✅ Backend is working!");
 });
 
-// Registration Route
+// Registration Route - GET for testing
+app.get("/register", (req, res) => {
+  res.json({ message: "Registration endpoint is working! Use POST method to register." });
+});
+
+// Registration Route - POST for actual registration
 app.post("/register", async (req, res) => {
   console.log("Registration request body:", req.body);
   
@@ -324,7 +349,8 @@ app.post("/register", async (req, res) => {
   try {
     // Store password as plain text (for demo/simple use only)
     // Insert trust member into database
-    const sql = `INSERT INTO organization_members (
+    const sql = `INSERT INTO 
+    organization_members (
       organization_type, organization_name, pan_no, email, mobile_no, spoc_name, spoc_designation, reg_address, reg_city, reg_state, reg_pincode, reg_website, reg_date, password_hash
     ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
 
@@ -2067,7 +2093,7 @@ process.on('SIGINT', () => {
 // Start server with error handling
 const server = app.listen(PORT, '0.0.0.0', () => {
   console.log(`🚀 Server running on port ${PORT}`);
-  console.log(`🌐 Railway URL: ${process.env.RAILWAY_STATIC_URL || 'Not set'}`);
+  console.log(`🌐 Frontend URL: ${process.env.FRONTEND_URL || 'Not set'}`);
   console.log(`🔧 Environment: ${process.env.NODE_ENV || 'development'}`);
   console.log(`🗄️ Database Host: ${process.env.DB_HOST || 'Not set'}`);
   console.log(`📊 Database Port: ${process.env.DB_PORT || '3306 (default)'}`);
