@@ -2,14 +2,16 @@ name: Frontend CI/CD
 
 on:
   push:
-    branches: [ main, develop ]
+    branches:  main
     paths:
       - 'Front-end/**'
   pull_request:
-    branches: [ main ]
+    branches:  main 
     paths:
       - 'Front-end/**'
-
+on:
+  workflow_dispatch:
+  
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
