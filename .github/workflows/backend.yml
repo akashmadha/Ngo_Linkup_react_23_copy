@@ -27,4 +27,4 @@ jobs:
       - name: Run backend tests
         run: |
           cd backend
-          npm test
+          NODE_ENV=test npm test -- --runInBand
